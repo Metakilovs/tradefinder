@@ -10,9 +10,12 @@ const bookingRoutes = require("./routes/bookings");
 const app = express();
 
 app.use(cors({
-  origin: ["https://tradefinder-dusky.vercel.app", "http://localhost:5173"],
-  credentials: true
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
+
+app.options("*", cors());
 app.use(express.json());
 
 connectDB();
@@ -25,7 +28,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/tradespeople", tradespeopleRoutes);
 app.use("/api/bookings", bookingRoutes);
 
-// Catch-all error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: "Something went wrong on the server" });
